@@ -15,13 +15,17 @@ import com.example.forum.UserRole;
 @RequestMapping(path="/user")
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;  // Dependency Injection
+    }
 
     @PostMapping(path="/addUser")
-    public @ResponseBody String addNewUser (@RequestParam String json) throws NoSuchAlgorithmException {
-        User n = new User();
+    public @ResponseBody String addNewUser (@RequestBody User user) throws NoSuchAlgorithmException {
 
+        System.out.println("User: " + user.getEmailAddr() + ", " + user.getUsername() + ", " + user.getPasswordString());
 //        n.setUsername(name);
 //        n.setEmailAddr(email);
 //        final MessageDigest digest = MessageDigest.getInstance("SHA3-256");

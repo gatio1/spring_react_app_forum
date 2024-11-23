@@ -5,8 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
+
 import com.example.forum.UserRole;
 
+// Make another field to let a user follow others.
 @Entity
 public class User {
     @Id
@@ -18,6 +21,9 @@ public class User {
     private String emailAddr;
 
     private byte[] passwdHash; //Use Spring security
+
+    @Transient // Added to send the password string in request body and not as parameter. Not present in db.
+    private String passwordString;
 
     private UserRole role;
 
@@ -56,6 +62,14 @@ public class User {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public String getPasswordString() {
+        return passwordString;
+    }
+
+    public void setPasswordString(String passwordString){
+        this.passwordString = passwordString;
     }
 
 

@@ -25,15 +25,20 @@ const SignupForm = ({ setCurrentPage }) => {
             toast.current.show({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
             return;
         }
-        const requestData = {
-            uname: uname,
-            email: email,
-            passwd: passwd
-          };
-        const requestString = JSON.stringify(requestData); 
+        const user = {
+            username: uname,
+            emailAddr: email,
+            passwordString: passwd
+        }
+        const headers = {
+            'Content-Type': 'application/json',
+            // 'Authorization': 'JWT fefege...'
+        }
+
+        // const requestString = JSON.stringify(requestData); 
         let response = 200;
         try {
-            response = await axios.post(window.entryPoint + '/user/addUser', 'json=' + requestString);
+            response = await axios.post(window.entryPoint + '/user/addUser', user, {headers : headers});
             if (response.status === 200) {
                 toast.current.show({ severity: 'success', summary: 'Sign up Successful', detail: response.data.message, life: 3000 });
                 setCurrentPage(CurrentPage.Browse);

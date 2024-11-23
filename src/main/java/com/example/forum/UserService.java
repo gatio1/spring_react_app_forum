@@ -1,26 +1,33 @@
 package com.example.forum;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserService {
-    private User user;
-    private String json_out;
-    public UserService(User user)
-    {
+    private UserRepository userRepository;
 
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;  // Dependency Injection
     }
 
-    public UserService(String userJson) // gets User by
+    public User createUser(User user)
     {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            // Use ObjectMapper to serialize the User object into a JSON string
-            user = objectMapper.readValue(userJson, User.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println(user.toString());
+        return user;
     }
+    // public UserService(String userJson) // gets User by
+    // {
+    //     ObjectMapper objectMapper = new ObjectMapper();
+    //     try {
+    //         // Use ObjectMapper to serialize the User object into a JSON string
+    //         user = objectMapper.readValue(userJson, User.class);
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 
     public String getJson()
     {

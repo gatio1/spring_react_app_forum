@@ -10,8 +10,7 @@ import BrowseEntries from './browseEntries'
 
 const ScreenContent = () =>
 {
-    const [currentPage, setCurrentPage] = useState(CurrentPage.Login);
-    const dasiprobvam = CurrentPage.Signup;
+    const [currentPage, setCurrentPage] = useState(CurrentPage.Signup);
 
     const myContent = () => 
         {
