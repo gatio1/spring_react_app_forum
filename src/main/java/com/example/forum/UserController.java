@@ -26,17 +26,19 @@ public class UserController {
     public @ResponseBody String addNewUser (@RequestBody User user) throws NoSuchAlgorithmException {
 
         System.out.println("User: " + user.getEmailAddr() + ", " + user.getUsername() + ", " + user.getPasswordString());
-//        n.setUsername(name);
-//        n.setEmailAddr(email);
-//        final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-//        n.setPasswdHash(digest.digest(passwd.getBytes(StandardCharsets.UTF_8))); // Hash the password
-//        n.setRole(UserRole.Regular);
-//        userRepository.save(n);
+        try{
+        User dbAccessRes = userService.createUser(user);
+        }catch(UserExistsException err)
+        {
+            System.out.println("Error thrown.");
+            return err.getMessage();
+
+        }
         return "Saved";
     }
 
     @GetMapping(path="/getUser")
-    public String getUser (@RequestParam String json)
+    public String getUser (@RequestParam Integer userId)
     {
         return "null";
     }

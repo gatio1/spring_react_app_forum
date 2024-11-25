@@ -20,7 +20,7 @@ public class User {
 
     private String emailAddr;
 
-    private byte[] passwdHash; //Use Spring security
+    private String passwdHash; //Use Spring security
 
     @Transient // Added to send the password string in request body and not as parameter. Not present in db.
     private String passwordString;
@@ -48,11 +48,11 @@ public class User {
         return emailAddr;
     }
 
-    public byte[] getPasswdHash() {
+    public String getPasswdHash() {
         return passwdHash;
     }
 
-    public void setPasswdHash(byte[] passwdHash) {
+    public void setPasswdHash(String passwdHash) {
         this.passwdHash = passwdHash;
     }
 
