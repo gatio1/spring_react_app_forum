@@ -9,13 +9,14 @@ import { Password } from 'primereact/password';
 import { Card } from 'primereact/card';
 import { Toast } from 'primereact/toast';
 
-const SignupForm = ({ setCurrentPage }) => {
+const SignupForm = () => {
     const [uname, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [passwd, setPassword] = useState('');
     const [error, setError] = useState(null);
     const toast = React.useRef(null);
 
+    const { currentPage, setCurrentPage } = usePage();
 
     const handleClick = async (e) => {
         e.preventDefault();

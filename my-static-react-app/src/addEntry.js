@@ -9,12 +9,14 @@ import { Password } from 'primereact/password';
 import { Card } from 'primereact/card';
 import { Toast } from 'primereact/toast';
 
-const AddEntry = ({ setCurrentPage }) =>
+const AddEntry = () =>
 {
     const [text, setText] = useState('');
     const [title, setTitle] = useState('');
     const toast = React.useRef(null);
+    const { currentPage, setCurrentPage } = usePage(); 
     const handleClick = () =>
+    
     {
         return 0;
     }

@@ -7,10 +7,12 @@ import LoginForm from './loginForm';
 import SignupForm from './signupForm';
 import CurrentPage from './state_enum'
 import BrowseEntries from './browseEntries'
+import { usePage } from './pageContext';
+
 
 const ScreenContent = () =>
 {
-    const [currentPage, setCurrentPage] = useState(CurrentPage.Signup);
+    const { currentPage, setCurrentPage } = usePage(); 
 
     const myContent = () => 
         {
@@ -19,18 +21,18 @@ const ScreenContent = () =>
             console.log('CurrentPage.Signup:', CurrentPage.Signup);  // Debug: check enum value
             switch(currentPage) { // Different returns here
                 case CurrentPage.Signup:
-                    ret = <SignupForm setCurrentPage={setCurrentPage} />;
+                    ret = <SignupForm/>;
                 break;
                 // code block
                 case CurrentPage.Login:
-                    ret = <LoginForm setCurrentPage={setCurrentPage} />;
+                    ret = <LoginForm />;
                 break;
                 // code block
                 case CurrentPage.AddNew:
-                    ret = <AddEntry setCurrentPage={setCurrentPage} />
+                    ret = <AddEntry />
                 break;
                 case CurrentPage.Browse:
-                    ret = <BrowseEntries setCurrentPage={setCurrentPage} />
+                    ret = <BrowseEntries />
                 break;
                 default:
                     ret = <p>Invalid state. Can't open page.</p>

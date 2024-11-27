@@ -3,7 +3,7 @@ import { usePage } from './pageContext';
 
 const BrowseEntries = () =>
 {
-    const { setCurrentPage } = usePage();
+    const { currentPage, setCurrentPage } = usePage(); 
     return (<div>sadlhfl</div>);
 }
 

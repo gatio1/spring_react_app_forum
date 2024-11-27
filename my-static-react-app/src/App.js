@@ -14,7 +14,9 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { InputText } from 'primereact/inputtext';
 import axios from 'axios';
 
-window.entryPoint = 'http://localhost:8080'
+window.entryPoint = 'http://localhost:8080';
+window.username = "";
+window.password = "";
 
 function App() {
   const [message, setMessage] = useState('');

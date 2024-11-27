@@ -1,4 +1,4 @@
-package com.example.forum;
+package com.example.forum.Tables;
 
 public enum UserRole {
     ReadOnly,
