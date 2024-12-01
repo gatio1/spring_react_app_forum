@@ -46,7 +46,7 @@ public class ForumEntryController {
 
     @GetMapping(path="/getList") // Truncate entries content
     public @ResponseBody List<ForumEntryRepresentation> getEntryList(@RequestParam int page, @RequestParam int perPage){
-
+        System.out.println("getList called");
         return forumEntryService.getAllEntries(0, 0);
     }
 

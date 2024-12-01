@@ -17,13 +17,13 @@ const BrowseEntries = () =>
             try {
                 const authToken = 'Basic ' + btoa(`${window.username}:${window.password}`);
                 // Replace this URL with your actual API endpoint
-            const response = await axios.get(window.entryPoint + '/entry/getList', {
+            const response = await axios.get(window.entryPoint + '/entries/getList', {
                 params: {
                     page: 0,
                     perPage: 0,
                 },
                 headers: {
-                    'Content-Type': 'application/json',
+                    // 'Content-Type': 'application/json',
                     'Authorization' : authToken, // Set the Authorization header
                 },
             }); 

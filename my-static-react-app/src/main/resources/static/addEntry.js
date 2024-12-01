@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Editor } from 'primereact/editor';
 import CurrentPage from './state_enum';
 
-import { InputText } from "primereact/inputtext";
 import { usePage } from './pageContext';
 import { Chips } from 'primereact/chips';
 import { Button } from 'primereact/button';
@@ -23,7 +22,7 @@ const AddEntry = () =>
     {
         e.preventDefault();
     
-        if (!enteredContent || !enteredTitle) {
+        if (!enteredContent || enteredTitle) {
             setError('All fields are required');
             toast.current.show({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
             return;
@@ -45,7 +44,7 @@ const AddEntry = () =>
         console.log(headers);
         let response = 200;
         try {
-            response = await axios.post(window.entryPoint + '/entry/add', entry, {headers : headers});
+            response = await axios.post(window.entryPoint + '/entry/add', entry, {headers : headers, auth : auth});
             // document.write(response);
             if (response.status === 200) {
                 toast.current.show({ severity: 'success', summary: 'Entry added successfully', detail: response.data.message, life: 3000 });
@@ -68,7 +67,7 @@ const AddEntry = () =>
                     <div className="p-field p-grid">
                         <label htmlFor="Title" className="p-col-12 p-md-2">Title</label>
                         <div className="p-col-12 p-md-10">
-                            <InputText id="Title" value={enteredTitle} onChange={(e) => setEnteredTitle(e.target.value)} placeholder="Enter title" />
+                            <Chips id="Title" value={enteredTitle} onChange={(e) => setEnteredTitle(e.target.value)} placeholder="Enter title" />
                         </div>
                     </div>
                     <div className="p-field p-grid">
