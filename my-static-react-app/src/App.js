@@ -17,6 +17,7 @@ import axios from 'axios';
 window.entryPoint = 'http://localhost:8080';
 window.username = "";
 window.password = "";
+window.userId = 0;
 
 function App() {
   const [message, setMessage] = useState('');

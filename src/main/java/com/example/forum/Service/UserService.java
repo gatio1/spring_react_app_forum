@@ -1,14 +1,17 @@
 package com.example.forum.Service;
 
 
+import com.example.forum.Exceptions.BadInputException;
 import com.example.forum.Exceptions.NotFoundException;
 import com.example.forum.Exceptions.UserExistsException;
 import com.example.forum.Repository.UserRepository;
+import com.example.forum.Representation.UserRepresentation;
 import com.example.forum.Tables.User;
 import com.example.forum.Tables.UserRole;
 import com.example.forum.model.AuthenticatedUser;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,9 +34,12 @@ public class UserService implements UserDetailsService{
         this.userRepository = userRepository;  // Dependency Injection
     }
 
-    public User createUser(User user) throws UserExistsException
+    public UserRepresentation createUser(User user) throws UserExistsException
     {
         List<User> userList;
+        if(validateEmail(user.getEmailAddr()) || user.getUsername() == null || user.getPasswordString() == null){
+            throw new BadInputException("Invalid user input.");
+        }
         userList = userRepository.findByEmailAddr(user.getEmailAddr());
         System.out.println("createUser called");
         try{
@@ -62,35 +68,35 @@ public class UserService implements UserDetailsService{
 
         userRepository.save(user);
 
-        return user;
+        return new UserRepresentation(user);
     }
 
     
-    public User findUser(User user) throws NotFoundException
+    public UserRepresentation findUser(User user) throws NotFoundException
     {
+        System.out.println("email: " + user.getEmailAddr() + ", " + user.getPasswordString());
         List<User> usersFound = userRepository.findByEmailAddr(user.getEmailAddr());
         try{
             if(usersFound.size() == 0)
                 throw new NotFoundException("User with given email doesn't exist.");
-            user.setPasswdHash(passwordEncoder.encode(user.getPasswordString()));
-            if(usersFound.get(0).getPasswdHash() != user.getPasswdHash())
+            if(!passwordEncoder.matches(user.getPasswordString(), usersFound.get(0).getPasswdHash()))
             {
                 throw new NotFoundException("User's password doesn't match.");
             }
 
         }catch(NotFoundException err){
-            System.out.println("throwing error");
+            System.out.println("throwing error " + err.getMessage());
             throw err;
         }
 
         usersFound.get(0).setPasswdHash(null);
         usersFound.get(0).setPasswordString(null);
 
-        return usersFound.get(0);
+        return new UserRepresentation(usersFound.get(0));
 
     }
 
-    public User getUser(Long id) throws NotFoundException
+    public UserRepresentation getUser(Long id) throws NotFoundException
     {
         User user = userRepository.findById(id);
         try{
@@ -103,7 +109,7 @@ public class UserService implements UserDetailsService{
 
         user.setPasswdHash(null);
         user.setPasswordString(null);;
-        return user;
+        return new UserRepresentation(user);
     }
 
     @Override
@@ -111,6 +117,13 @@ public class UserService implements UserDetailsService{
         User user = userRepository.findByUsername(username).get(0);
         AuthenticatedUser authUser = new AuthenticatedUser(user);
         return authUser;
+    }
+
+    public static boolean validateEmail(String emailAddress) {
+        String regexPattern = "^(.+)@(\\S+)$"; 
+        return Pattern.compile(regexPattern)
+        .matcher(emailAddress)
+        .matches();
     }
 
 }

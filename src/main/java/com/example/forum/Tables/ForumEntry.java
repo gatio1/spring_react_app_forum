@@ -2,6 +2,8 @@ package com.example.forum.Tables;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,12 +20,14 @@ import jakarta.persistence.ManyToOne;
 public class ForumEntry {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
+    // @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
         name = "entries_collections",
@@ -39,10 +43,10 @@ public class ForumEntry {
     @Column(length = 10000, nullable = false)
     private String content;
 
-    public Integer getId(){
+    public Long getId(){
         return id;
     }
-    public void setId( Integer id){
+    public void setId( Long id){
         this.id = id;
     }
     public String getTitle(){

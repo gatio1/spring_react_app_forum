@@ -1,5 +1,7 @@
 package com.example.forum.Controller;
 
+import com.example.forum.Exceptions.NotFoundException;
+import com.example.forum.Representation.ForumEntryRepresentation;
 import com.example.forum.Service.ForumEntryService;
 import com.example.forum.Tables.ForumEntry;
 
@@ -24,34 +26,46 @@ public class ForumEntryController {
     ForumEntryService forumEntryService;
 
     @PostMapping(path="/add")
-    public @ResponseBody String addEntry(@RequestBody ForumEntry forumEntry)
+    public @ResponseBody ForumEntryRepresentation addEntry(@RequestBody ForumEntry forumEntry)
     {
-
-        return null;
+        ForumEntryRepresentation representation = forumEntryService.addEntry(forumEntry);
+        return representation;
     }
 
-    @GetMapping(path="num")    
-    public @ResponseBody int getNum()
+    @GetMapping(path="/num")    
+    public @ResponseBody long getNum()
     {
+        return forumEntryService.getNumEntries();
+    }
 
-        return 0;
+    @GetMapping(path="/numFromUser")
+    public @ResponseBody long getNumFromUser(@RequestParam long userId)
+    {
+        return forumEntryService.getNumEntriesUser(userId);
     }
 
     @GetMapping(path="/getList") // Truncate entries content
-    public @ResponseBody List<ForumEntry> getEntryList(@RequestParam int page, @RequestParam int perPage){
-        return null;
+    public @ResponseBody List<ForumEntryRepresentation> getEntryList(@RequestParam int page, @RequestParam int perPage){
+
+        return forumEntryService.getAllEntries(0, 0);
     }
 
-    @GetMapping(path="getUsetList")
-    public @ResponseBody List<ForumEntry> getUserEntryList(@RequestParam int UserId)
+    @GetMapping(path="/getUserList")
+    public @ResponseBody List<ForumEntryRepresentation> getUserEntryList()
     {
-        return null;
+        return forumEntryService.getByUser();
     }
 
-    @GetMapping(path="get")
-    public @ResponseBody ForumEntry getEntry(@RequestParam int entryId)
+    @GetMapping(path="/get")
+    public @ResponseBody ForumEntryRepresentation getEntry(@RequestParam long entryId)
     {
-        return null;
+        ForumEntryRepresentation entry = null;
+        try{
+            entry = forumEntryService.getEntry(entryId);
+        }catch(NotFoundException err){
+            throw err;
+        }
+        return entry;
     }
 
     @PostMapping(path="/category")

@@ -11,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 
 import com.example.forum.Exceptions.NotFoundException;
 import com.example.forum.Exceptions.UserExistsException;
+import com.example.forum.Representation.UserRepresentation;
 import com.example.forum.Service.UserService;
 import com.example.forum.Tables.User;
 import com.example.forum.Tables.UserRole;
@@ -29,23 +30,22 @@ public class UserController {
     }
 
     @PostMapping(path="/addUser")
-    public @ResponseBody String addNewUser (@RequestBody User user) throws NoSuchAlgorithmException {
+    public @ResponseBody UserRepresentation addNewUser (@RequestBody User user) throws NoSuchAlgorithmException {
 
+        UserRepresentation dbAccessRes = null;
         System.out.println("User: " + user.getEmailAddr() + ", " + user.getUsername() + ", " + user.getPasswordString());
         try{
-        User dbAccessRes = userService.createUser(user);
+        dbAccessRes = userService.createUser(user);
         }catch(UserExistsException err)
         {
             System.out.println("Error thrown.");
-            return err.getMessage();
-
         }
-        return "Saved";
+        return dbAccessRes;
     }
 
-    @GetMapping(path="/authUser") //Spring security takes care of authentication. This function only validates credentials.
-    public @ResponseBody User authUser (@RequestBody User user) throws NoSuchAlgorithmException {
-        User userInfo = null;
+    @PostMapping(path="/authUser") //Spring security takes care of authentication. This function only validates credentials.
+    public @ResponseBody UserRepresentation authUser (@RequestBody User user) throws NoSuchAlgorithmException {
+        UserRepresentation userInfo = null;
         try{
             userInfo = userService.findUser(user);
         }catch(NotFoundException err)
@@ -57,9 +57,9 @@ public class UserController {
     }
 
     @GetMapping(path="/getUser")
-    public @ResponseBody User getUser (@RequestParam Long id) throws NoSuchAlgorithmException {
-        User user = null;
-        AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Get user credentials trough spring security.
+    public @ResponseBody UserRepresentation getUser (@RequestParam Long id) throws NoSuchAlgorithmException {
+        UserRepresentation user = null;
+        // AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Get user credentials trough spring security.
         try{
         user = userService.getUser(id);
         }catch(NotFoundException err)

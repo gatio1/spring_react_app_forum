@@ -9,9 +9,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class SecurityConfiguration {
+public class SecurityConfiguration implements WebMvcConfigurer{
+
+    // @Override
+    // public void addCorsMappings(CorsRegistry registry) {
+    //     // Allow cross-origin requests from a specific origin (for example, your frontend running on localhost:3000)
+    //     registry.addMapping("/**") // Allow all endpoints to accept cross-origin requests
+    //             .allowedOrigins("http://localhost:3000") // Add your frontend URL here
+    //             .allowedMethods("GET", "POST", "PUT", "DELETE") // Allow the HTTP methods you need
+    //             .allowedHeaders("*") // Allow all headers
+    //             .allowCredentials(true); // Allow cookies and credentials if needed
+    // }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

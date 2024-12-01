@@ -20,22 +20,28 @@ const LoginForm = () => {
     const handleClick = async (e) => {
         e.preventDefault();
     
-        if (email || !passwd) {
+        if (!email || !passwd) {
             setError('All fields are required');
             toast.current.show({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
             return;
         }
-        const requestData = {
-            email: email,
-            passwd: passwd
+        const user= {
+                emailAddr: email,
+                passwordString: passwd
           };
-        const requestString = JSON.stringify(requestData); 
+        const headers = {
+            'Content-Type': 'application/json',
+            // 'Authorization': 'JWT fefege...'
+        }
         let response = 200;
         try {
-            response = await axios.post(window.entryPoint + '/user/login', 'json=' + requestString);
-            document.write(response);
+            response = await axios.post(window.entryPoint + '/user/authUser', user, {headers : headers});
+            // document.write(response);
             if (response.status === 200) {
                 toast.current.show({ severity: 'success', summary: 'Sign in Successful', detail: response.data.message, life: 3000 });
+                window.password = user.passwordString;
+                window.username = response.data.username;
+                window.userId = response.data.userId;
                 setCurrentPage(CurrentPage.Browse);
             } else {
                 toast.current.show({ severity: 'error', summary: 'Sign in Failed', detail: response.data.error, life: 3000 });
