@@ -16,6 +16,7 @@ const AddEntry = () =>
 {
     const [enteredContent, setEnteredContent] = useState('');
     const [enteredTitle, setEnteredTitle] = useState('');
+    const { unameVal, setUnameVal, passwdVal, setPasswdVal} = usePage();
     const [error, setError] = useState(null);
     const toast = React.useRef(null);
     const { currentPage, setCurrentPage } = usePage(); 
@@ -28,7 +29,7 @@ const AddEntry = () =>
             toast.current.show({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
             return;
         }
-        const authToken = 'Basic ' + btoa(`${window.username}:${window.password}`);
+        const authToken = 'Basic ' + btoa(`${unameVal}:${passwdVal}`);
         const entry= {
                 title: enteredTitle,
                 content: enteredContent 
@@ -39,8 +40,8 @@ const AddEntry = () =>
             // 'Authorization': 'JWT fefege...'
         };
         const auth = {
-            username : window.username,
-            password : window.password
+            username : unameVal,
+            password : passwdVal
         }
         console.log(headers);
         let response = 200;

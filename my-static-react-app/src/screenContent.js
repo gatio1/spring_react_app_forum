@@ -13,6 +13,7 @@ import { usePage } from './pageContext';
 const ScreenContent = () =>
 {
     const { currentPage, setCurrentPage } = usePage(); 
+    const { unameVal, setUnameVal, passwdVal, setPasswdVal} = usePage();
 
     const myContent = () => 
         {
@@ -33,6 +34,14 @@ const ScreenContent = () =>
                 break;
                 case CurrentPage.Browse:
                     ret = <BrowseEntries />
+                break;
+                case CurrentPage.UserInfo:
+
+                break;
+                case CurrentPage.Logout:
+                    setUnameVal("");
+                    setPasswdVal("");
+                    setCurrentPage(CurrentPage.Login);
                 break;
                 default:
                     ret = <p>Invalid state. Can't open page.</p>

@@ -12,6 +12,7 @@ import { Toast } from 'primereact/toast';
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [passwd, setPassword] = useState('');
+    const { unameVal, setUnameVal, passwdVal, setPasswdVal} = usePage();
     const [error, setError] = useState(null);
     const toast = React.useRef(null);
 
@@ -39,8 +40,8 @@ const LoginForm = () => {
             // document.write(response);
             if (response.status === 200) {
                 toast.current.show({ severity: 'success', summary: 'Sign in Successful', detail: response.data.message, life: 3000 });
-                window.password = user.passwordString;
-                window.username = response.data.username;
+                setPasswdVal(user.passwordString);
+                setUnameVal(response.data.username);
                 window.userId = response.data.userId;
                 setCurrentPage(CurrentPage.Browse);
             } else {

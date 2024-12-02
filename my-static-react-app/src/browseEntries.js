@@ -11,11 +11,12 @@ import CurrentPage from './state_enum';
 const BrowseEntries = () =>
 {
     const [data, setData] = useState([]);
+    const { unameVal, setUnameVal, passwdVal, setPasswdVal} = usePage();
     useEffect(() => {
         // Function to fetch data from API
         const fetchData = async () => {
             try {
-                const authToken = 'Basic ' + btoa(`${window.username}:${window.password}`);
+                const authToken = 'Basic ' + btoa(`${unameVal}:${passwdVal}`);
                 // Replace this URL with your actual API endpoint
             const response = await axios.get(window.entryPoint + '/entry/getList', {
                 params: {
