@@ -43,6 +43,19 @@ public class UserController {
         return dbAccessRes;
     }
 
+    @PutMapping(path="/modUser")
+    public @ResponseBody UserRepresentation modUser(@RequestBody User user) throws UserExistsException
+    {
+        UserRepresentation userRep = null;
+        try{
+            userRep = modUser(user);
+        }catch(UserExistsException err)
+        {
+            throw err;
+        }
+        return userRep;
+
+    }
     @PostMapping(path="/authUser") //Spring security takes care of authentication. This function only validates credentials.
     public @ResponseBody UserRepresentation authUser (@RequestBody User user) throws NoSuchAlgorithmException {
         UserRepresentation userInfo = null;

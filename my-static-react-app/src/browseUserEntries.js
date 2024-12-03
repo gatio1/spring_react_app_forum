@@ -9,7 +9,7 @@ import axios from 'axios';
 import CurrentPage from './state_enum';
 import DisplayEntries from "./displayEntries"
 
-const BrowseEntries = () =>
+const BrowseUserEntries = () =>
 {
     const [data, setData] = useState([]);
     const { unameVal, setUnameVal, passwdVal, setPasswdVal} = usePage();
@@ -19,11 +19,11 @@ const BrowseEntries = () =>
             try {
                 const authToken = 'Basic ' + btoa(`${unameVal}:${passwdVal}`);
                 // Replace this URL with your actual API endpoint
-            const response = await axios.get(window.entryPoint + '/entry/getList', {
-                params: {
-                    page: 0,
-                    perPage: 0,
-                },
+            const response = await axios.get(window.entryPoint + '/entry/getUserList', {
+                // params: {
+                //     page: 0,
+                //     perPage: 0,
+                // },
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization' : authToken, // Set the Authorization header
@@ -67,4 +67,4 @@ const BrowseEntries = () =>
        );
 }
 
-export default BrowseEntries;
+export default BrowseUserEntries;

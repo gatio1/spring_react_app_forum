@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService{
     public UserRepresentation createUser(User user) throws UserExistsException
     {
         List<User> userList;
-        if(validateEmail(user.getEmailAddr()) || user.getUsername() == null || user.getPasswordString() == null){
+        if(!validateEmail(user.getEmailAddr()) || user.getUsername() == null || user.getPasswordString() == null){
             throw new BadInputException("Invalid user input.");
         }
         userList = userRepository.findByEmailAddr(user.getEmailAddr());
@@ -96,9 +96,54 @@ public class UserService implements UserDetailsService{
 
     }
 
+    public UserRepresentation modUser(User user) throws UserExistsException
+    {
+        
+        AuthenticatedUser authUser = new AuthenticatedUser(user);
+
+        User fetchedUser = authUser.getUser();
+        if(fetchedUser == null)
+            throw new NotFoundException("Authenticated user not found.");
+
+        List<User> userList = userRepository.findByEmailAddr(user.getEmailAddr());
+        
+        try{
+            if(userList.size() != 0 && !(userList.size() == 1 && userList.get(0).getEmailAddr().equals(fetchedUser.getEmailAddr()) ))
+            {
+                System.out.println("email not unique");
+                throw new UserExistsException("Username in use.");
+            }
+
+            userList = userRepository.findByUsername(user.getUsername());
+            if(userList.size() != 0 && !(userList.size() == 1 && userList.get(0).getUsername().equals(fetchedUser.getUsername())))
+            {
+                System.out.println("Username not unique");
+                throw new UserExistsException("Email in use.");
+            }
+        }catch(UserExistsException err){
+            throw err;
+        }
+        if(user.getPasswordString() != null){
+            user.setPasswdHash(passwordEncoder.encode(user.getPasswordString()));
+            fetchedUser.setPasswdHash(user.getPasswdHash());
+        }
+
+        
+        if(user.getEmailAddr() != null)
+            fetchedUser.setEmailAddr(user.getEmailAddr());
+        if(user.getUsername() != null)
+            fetchedUser.setUsername(user.getUsername());
+
+        userRepository.save(fetchedUser);
+
+        
+        return new UserRepresentation(fetchedUser);
+    }
+
     public UserRepresentation getUser(Long id) throws NotFoundException
     {
         User user = userRepository.findById(id);
+        System.out.println("id of user fetched: "+ id);
         try{
             if(user == null)
                 throw new NotFoundException("User doesn't exist.");

@@ -7,7 +7,10 @@ import LoginForm from './loginForm';
 import SignupForm from './signupForm';
 import CurrentPage from './state_enum'
 import BrowseEntries from './browseEntries'
+import UserInfo from './userInfo'
 import { usePage } from './pageContext';
+import BrowseUserEntries from './browseUserEntries';
+import EditUser from './editUser';
 
 
 const ScreenContent = () =>
@@ -36,12 +39,18 @@ const ScreenContent = () =>
                     ret = <BrowseEntries />
                 break;
                 case CurrentPage.UserInfo:
-
+                    ret = <UserInfo />
                 break;
                 case CurrentPage.Logout:
                     setUnameVal("");
                     setPasswdVal("");
                     setCurrentPage(CurrentPage.Login);
+                break;
+                case CurrentPage.BrowseUserEntries:
+                    ret = <BrowseUserEntries/>
+                break;
+                case CurrentPage.EditUser:
+                    ret = <EditUser/>
                 break;
                 default:
                     ret = <p>Invalid state. Can't open page.</p>
