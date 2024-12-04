@@ -138,6 +138,7 @@ public class ForumEntryService {
         }
 
         entryFound.getEntryCollections().add(collFound);
+        forumEntryRepository.save(entryFound);
 
         Set<EntryCollection> collections = null; 
         List<EntryCollectionRepresentation> colListRep= new ArrayList<EntryCollectionRepresentation>();

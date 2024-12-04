@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.forum.Exceptions.BadInputException;
 import com.example.forum.Exceptions.NotFoundException;
@@ -25,14 +26,14 @@ public class EntryCollectionController {
     private EntryCollectionService entryCollectionService;
 
     @GetMapping(path="/getTopics")
-    public List<EntryCollectionRepresentation> getTopicsList()
+    public @ResponseBody List<EntryCollectionRepresentation> getTopicsList()
     {
 
         return entryCollectionService.getAll();
     }
 
     @GetMapping(path = "/getEntryCol")
-    public List<EntryCollectionRepresentation> getCollections(long entryId)
+    public @ResponseBody List<EntryCollectionRepresentation> getCollections(long entryId)
     {
         if(entryId > 0)
         {
@@ -43,7 +44,7 @@ public class EntryCollectionController {
     }
 
     @PostMapping(path = "/add")
-    public EntryCollectionRepresentation addCollection(@RequestBody EntryCollection col) 
+    public @ResponseBody EntryCollectionRepresentation addCollection(@RequestBody EntryCollection col) 
     {
         if(col == null ){
             throw new BadInputException("Bad input sent.");
@@ -53,4 +54,5 @@ public class EntryCollectionController {
         System.out.println("Everything's fine.");
         return entryCollectionService.addCollection(col);
     }
+
 }

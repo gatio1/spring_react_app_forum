@@ -71,8 +71,8 @@ public class ForumEntryController {
         return entry;
     }
 
-    @GetMapping(path = "/getEntries")
-    public List<ForumEntryRepresentation> getEntries(long collectionId) 
+    @GetMapping(path = "/getColEntries")
+    public @ResponseBody List<ForumEntryRepresentation> getEntries(long collectionId) 
     {
         if(collectionId > 0)
         {
@@ -82,12 +82,12 @@ public class ForumEntryController {
         }
     }
 
-    @PostMapping(path="/category")
-    public @ResponseBody String setCategory(@RequestParam int entryId, @RequestParam int categoryId)
-    {
+    // @PostMapping(path="/category")
+    // public @ResponseBody String setCategory(@RequestParam int entryId, @RequestParam int categoryId)
+    // {
 
-        return "Success";
-    }
+    //     return "Success";
+    // }
 
     @PutMapping(path="/setCollection")
     public @ResponseBody List<EntryCollectionRepresentation> setCollection(@RequestParam long entryId, @RequestParam long collectionId)
