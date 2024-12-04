@@ -1,6 +1,8 @@
 package com.example.forum.Tables;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,8 +36,11 @@ public class ForumEntry {
         joinColumns = @JoinColumn(name = "forumEntry_id"),
         inverseJoinColumns = @JoinColumn(name = "entryCollection_id")
     )
-    private List<EntryCollection> entryCollections;
+    private Set<EntryCollection> entryCollections = new HashSet<>();
 
+    public Set<EntryCollection> getEntryCollections() {
+        return entryCollections;
+    }
     @Column(length = 256, nullable = false)
     private String title;
 
