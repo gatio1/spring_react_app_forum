@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.cglib.core.Local;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -16,6 +18,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
+import java.time.LocalDateTime;
 
 // A new entry in the forum. Should have relation with User. Can also be a comment to another entry
 @Entity
@@ -38,8 +43,30 @@ public class ForumEntry {
     )
     private Set<EntryCollection> entryCollections = new HashSet<>();
 
-    public Set<EntryCollection> getEntryCollections() {
-        return entryCollections;
+    private LocalDateTime timeOfPost;
+
+    public LocalDateTime getTimeOfPost() {
+        return timeOfPost;
+    }
+    public void setTimeOfPost(LocalDateTime timeOfPost) {
+        this.timeOfPost = timeOfPost;
+    }
+    @ManyToMany
+    @JoinTable(
+        name = "entries_categories",
+        joinColumns = @JoinColumn(name = "forumEntry_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<CustomCategory> customCategories = new HashSet<>();
+
+    @OneToMany(mappedBy = "commentedEntry")
+    private Set<Comment> entryComments = new HashSet<>();
+
+    public Set<Comment> getEntryComments() {
+        return entryComments;
+    }
+    public void setEntryComments(Set<Comment> entryComments) {
+        this.entryComments = entryComments;
     }
     @Column(length = 256, nullable = false)
     private String title;
@@ -48,7 +75,10 @@ public class ForumEntry {
     @Column(length = 10000, nullable = false)
     private String content;
 
-    public Long getId(){
+    public Set<EntryCollection> getEntryCollections() {
+        return entryCollections;
+    }
+        public Long getId(){
         return id;
     }
     public void setId( Long id){

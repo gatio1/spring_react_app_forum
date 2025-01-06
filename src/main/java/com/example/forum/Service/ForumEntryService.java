@@ -54,6 +54,11 @@ public class ForumEntryService {
         return representation;
     }
 
+    //Check if User has rights. Also make sure entry is removed from topic and collections and all related comments are removed too.
+    public String deleteEntry(Long entryId){
+        return null;
+    }
+
     public ForumEntryRepresentation getEntry(Long id)
     {
         ForumEntry entryFound = forumEntryRepository.findById(id);
@@ -158,5 +163,6 @@ public class ForumEntryService {
     private List<ForumEntry> makePage(int pageNum, int entriesPerPage, List<ForumEntry> allEntries){
         return null;
     }
+
 
 }

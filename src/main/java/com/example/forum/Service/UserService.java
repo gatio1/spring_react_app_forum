@@ -6,11 +6,13 @@ import com.example.forum.Exceptions.NotFoundException;
 import com.example.forum.Exceptions.UserExistsException;
 import com.example.forum.Repository.UserRepository;
 import com.example.forum.Representation.UserRepresentation;
+import com.example.forum.Tables.ForumEntry;
 import com.example.forum.Tables.User;
 import com.example.forum.Tables.UserRole;
 import com.example.forum.model.AuthenticatedUser;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -69,6 +71,17 @@ public class UserService implements UserDetailsService{
         userRepository.save(user);
 
         return new UserRepresentation(user);
+    }
+    // Needs to be called by the same user or by admin
+    public String deleteUser(Long userId){
+        User user = null;
+        user = userRepository.findById(userId);
+
+        if(user != null){
+            userRepository.delete(user);
+            return "User successfully deleted.";
+        }
+        return "User deletion failed.";
     }
 
     
@@ -171,4 +184,9 @@ public class UserService implements UserDetailsService{
         .matches();
     }
 
+    //
+    public static List<ForumEntry> getEntriesByUserInterest()
+    {
+        return null;
+    }
 }

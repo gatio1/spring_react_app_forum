@@ -2,6 +2,7 @@ package com.example.forum.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.example.forum.Repository.EntryCollectionRepository;
 import com.example.forum.Repository.ForumEntryRepository;
 import com.example.forum.Tables.EntryCollection;
 import com.example.forum.Tables.ForumEntry;
+import com.example.forum.Tables.UserRelation;
 import com.example.forum.Representation.EntryCollectionRepresentation;
 import com.example.forum.Representation.ForumEntryRepresentation;
 
@@ -63,6 +65,18 @@ public class EntryCollectionService {
         collections.forEach((n) -> colListRep.add(new EntryCollectionRepresentation(n)));
 
         return colListRep;
+    }
+
+    public String removeCollection(Long collectionId)
+    {
+        EntryCollection relationFound = entryCollectionRepository.findById(collectionId);
+
+        if(relationFound == null){
+            throw new NotFoundException("Collection not found.");
+        }
+
+        entryCollectionRepository.delete(relationFound);
+        return "Successfully deleted.";
     }
 
 }

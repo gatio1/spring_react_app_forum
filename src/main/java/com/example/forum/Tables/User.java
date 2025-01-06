@@ -10,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 
@@ -31,8 +32,34 @@ public class User {
 
     private UserRole role;
 
-    @OneToMany(mappedBy = "user", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch=FetchType.EAGER, orphanRemoval = true)
     private List<ForumEntry> entries;
+
+    @OneToMany(mappedBy = "user1", fetch=FetchType.EAGER, orphanRemoval = true)
+    private List<UserRelation> RelationEntriesFrom;
+
+    @OneToMany(mappedBy = "user2", fetch=FetchType.EAGER, orphanRemoval = true)
+    private List<UserRelation> RelationEntriesTo;
+
+    @ManyToMany(mappedBy = "collectionSubscribers")
+    private Set<EntryCollection> subscribedCollections = new HashSet<>();
+
+    @ManyToMany(mappedBy = "topicSubscribers")
+    private Set<Topic> subscribedTopics = new HashSet<>();
+
+    @OneToMany(mappedBy = "categoryOwner", orphanRemoval = true)
+    private Set<CustomCategory> ownedCategories = new HashSet<>();
+
+    @OneToMany(mappedBy = "commentingUser")
+    private Set<Comment> userComments = new HashSet<>();
+
+    public Set<Comment> getUserComments() {
+        return userComments;
+    }
+
+    public void setUserComments(Set<Comment> userComments) {
+        this.userComments = userComments;
+    }
 
     public void setId(Long id){
         this.id = id;
