@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.example.forum.Tables.User;
+import com.example.forum.Tables.UserRole;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -56,7 +58,20 @@ public class ForumEntryService {
 
     //Check if User has rights. Also make sure entry is removed from topic and collections and all related comments are removed too.
     public String deleteEntry(Long entryId){
-        return null;
+        ForumEntry entry = forumEntryRepository.findById(entryId);
+
+        if(entry == null){
+            throw new NotFoundException("Entry not found.");
+        }
+        AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Get user credentials trough spring security.
+        User user = authUser.getUser();
+        List<UserRole> role = new ArrayList<>();
+        role.add(UserRole.Admin);
+        user.roleMatch(role, true, entry.getUser());
+
+        forumEntryRepository.delete(entry);
+
+        return "Deleted successfully.";
     }
 
     public ForumEntryRepresentation getEntry(Long id)

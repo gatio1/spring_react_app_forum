@@ -11,10 +11,12 @@ import com.example.forum.Tables.User;
 import com.example.forum.Tables.UserRole;
 import com.example.forum.model.AuthenticatedUser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -76,6 +78,12 @@ public class UserService implements UserDetailsService{
     public String deleteUser(Long userId){
         User user = null;
         user = userRepository.findById(userId);
+
+        AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Get user credentials trough spring security.
+        User myUser = authUser.getUser();
+        List<UserRole> roles = new ArrayList<>();
+        roles.add(UserRole.Admin);
+        myUser.roleMatch(roles, true, user);
 
         if(user != null){
             userRepository.delete(user);

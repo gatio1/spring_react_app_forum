@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.forum.Exceptions.ForbiddenException;
 import com.fasterxml.jackson.annotation.JsonTypeId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -52,6 +53,7 @@ public class User {
 
     @OneToMany(mappedBy = "commentingUser")
     private Set<Comment> userComments = new HashSet<>();
+
 
     public Set<Comment> getUserComments() {
         return userComments;
@@ -113,5 +115,20 @@ public class User {
         return entries;
     }
 
+    // sameUser is flag that indicates if the user that created object can perform action.
+    public boolean roleMatch(List<UserRole> expectedRole, boolean sameUser, User user){
+        
+        if(sameUser && user.getId() == this.getId()){
+            return true;
+        }
+
+        for (UserRole userRole : expectedRole) {
+            if(user.getRole() == userRole){
+                return true;
+            }
+        }
+
+        throw new ForbiddenException("User permissions don't allow action.");
+    }
 
 }

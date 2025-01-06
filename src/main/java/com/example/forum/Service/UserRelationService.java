@@ -2,6 +2,7 @@ package com.example.forum.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,7 +43,18 @@ public class UserRelationService {
 
     //Check user privileges.
     public String removeRelation(Long relationId){
-        userRelationRepository.deleteById(relationId);
+        Optional<UserRelation> relationFound = userRelationRepository.findById(relationId);
+        if(!relationFound.isPresent()){
+            throw new NotFoundException("Couldn't find relation");
+        }
+        UserRelation Relation = relationFound.get();
+
+        AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Get user credentials trough spring security.
+        User myUser = authUser.getUser();
+        myUser.roleMatch(null, true, relationFound.get().getUser1());
+        
+
+        userRelationRepository.delete(relationFound.get());
         return "Successfully deleted relation.";
     }
 

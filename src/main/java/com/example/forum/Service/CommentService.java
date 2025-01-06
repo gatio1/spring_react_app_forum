@@ -1,7 +1,6 @@
 package com.example.forum.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +18,7 @@ import com.example.forum.Representation.CommentRepresentation;
 import com.example.forum.Tables.Comment;
 import com.example.forum.Tables.ForumEntry;
 import com.example.forum.Tables.User;
+import com.example.forum.Tables.UserRole;
 import com.example.forum.model.AuthenticatedUser;
 
 
@@ -56,7 +56,16 @@ public class CommentService {
     //Check if user has rights.
     public String deleteComment(Long commentId){
         Optional<Comment> comment = commentRepository.findById(commentId);
-        if(comment.isPresent()){
+        if(comment.isPresent()){        
+            AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Get user credentials trough spring security.
+            User user = authUser.getUser();
+            List<UserRole> role = new ArrayList<>();
+            role.add(UserRole.Admin);
+            // Admin and commenter can remove a comment.
+            user.roleMatch(role, true, comment.get().getCommentingUser());
+            // Author of commented entry ca remove ceomment.
+            user.roleMatch(null, true, comment.get().getCommentedEntry().getUser());
+
             commentRepository.delete(comment.get());
             return "Successfully deleted comment.";
         }

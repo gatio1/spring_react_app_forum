@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.forum.Exceptions.BadInputException;
@@ -15,6 +16,9 @@ import com.example.forum.Repository.ForumEntryRepository;
 import com.example.forum.Tables.EntryCollection;
 import com.example.forum.Tables.ForumEntry;
 import com.example.forum.Tables.UserRelation;
+import com.example.forum.Tables.UserRole;
+import com.example.forum.Tables.User;
+import com.example.forum.model.AuthenticatedUser;
 import com.example.forum.Representation.EntryCollectionRepresentation;
 import com.example.forum.Representation.ForumEntryRepresentation;
 
@@ -70,6 +74,13 @@ public class EntryCollectionService {
     public String removeCollection(Long collectionId)
     {
         EntryCollection relationFound = entryCollectionRepository.findById(collectionId);
+
+        AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Get user credentials trough spring security.
+        User user = authUser.getUser();
+        List<UserRole> role = new ArrayList<>();
+        role.add(UserRole.Admin);
+        user.roleMatch(role, false, null);
+
 
         if(relationFound == null){
             throw new NotFoundException("Collection not found.");

@@ -82,4 +82,9 @@ public class UserController {
         return user;
     }
 
+    @PostMapping(path="/giveAdmin")
+    public @ResponseBody UserRepresentation giveAdmin(@RequestParam Long userId) throws NoSuchAlgorithmException {
+        return null;
+    }
+
 }
